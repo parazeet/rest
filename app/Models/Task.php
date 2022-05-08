@@ -9,22 +9,21 @@ class Task extends Model
 {
     use HasFactory;
 
-    const TASK_IMG_PATH = '/img/tasks_img/';
-
     protected $fillable = [
+        'user_id',
         'name',
-        'email',
-        'description',
-        'img',
-        'status'
+        'description'
     ];
 
-    public function getImg()
-    {
-        if (empty(trim($this->img))) {
-            return self::TASK_IMG_PATH . 'default_img.png';
-        }
+    protected $dates = ['created_at'];
 
-        return self::TASK_IMG_PATH . $this->img;
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'task2tag');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -14,6 +14,22 @@ class TagResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $tasks = [];
+
+        foreach ($this->tasks as $task) {
+            $tasks[] = [
+                'id' => $task->id,
+                'name' => $task->name,
+                'description' => $task->description,
+                'date of creation' => $task->created_at->format('d.m.Y H:i:s')
+            ];
+        }
+
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'date of creation' => $this->created_at->format('d.m.Y H:i:s'),
+            'tasks' => $tasks
+        ];
     }
 }

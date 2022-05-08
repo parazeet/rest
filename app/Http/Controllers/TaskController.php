@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\Task;
 use App\Http\Requests\CreateTaskRequest;
-use Intervention\Image\ImageManagerStatic as Image;
+
+
 
 class TaskController extends Controller
 {
@@ -12,49 +14,27 @@ class TaskController extends Controller
 
     public function index()
     {
-        $tasks = Task::orderBy('created_at')->paginate(self::TASK_PER_PAGE);
+        $tags = Tag::where('user_id', auth()->id())->orderByDesc('created_at')->get();
+        $tasks = Task::where('user_id', auth()->id())
+            ->with('tags')
+            ->orderByDesc('created_at')
+            ->paginate(self::TASK_PER_PAGE);
 
-        return view('index', compact('tasks'));
+        return view('index', compact('tasks', 'tags'));
     }
 
     public function store(CreateTaskRequest $request)
     {
         $task = Task::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'user_id' => auth()->id(),
+            'name' => $request->task_name,
             'description' => $request->description,
         ]);
 
-        if ($request->hasFile('img')) {
-            $this->saveImg($task, $request);
+        if ($request->tags) {
+            $task->tags()->attach($request->tags);
         }
 
         return redirect()->back()->with('message', 'Задача успешно добавлена!');
-    }
-
-    private function saveImg(Task $task, CreateTaskRequest $request)
-    {
-        try{
-            $img = $request->img;
-            $ext = $img->getClientOriginalExtension();
-            $path = $task::TASK_IMG_PATH . $task->id . '.' . $ext;
-
-            if (!is_dir(public_path($task::TASK_IMG_PATH))) {
-                mkdir(public_path($task::TASK_IMG_PATH), 0777, true);
-            }
-
-            $imgResize = Image::make($img->getRealPath());
-            $imgResize->resize(320,240, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $imgResize->save(public_path($path));
-
-            // тут могли б отправлять файл в облако и удалять локально
-
-            $task->img = $task->id . '.' . $ext;
-            $task->save();
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors('Не удалось сохранить картинку!');
-        }
     }
 }

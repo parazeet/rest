@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::resource('/', App\Http\Controllers\TaskController::class)->only('index', 'store');
-
-Route::group(['middleware' => ['auth', 'verifyAdmin']], function () {
-    Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin');
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('/', App\Http\Controllers\TaskController::class)->only('index', 'store');
+    Route::resource('/tag', App\Http\Controllers\TagController::class)->only('index', 'store');
+    Route::post('createToken', [App\Http\Controllers\TokkenController::class, 'index'])->name('createToken');
 });

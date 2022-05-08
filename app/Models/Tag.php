@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tags extends Model
+class Tag extends Model
 {
     use HasFactory;
 
@@ -14,6 +14,11 @@ class Tags extends Model
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class, 'task2tag', 'tag_id', 'task_id');
+        return $this->belongsToMany(Task::class, 'task2tag');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

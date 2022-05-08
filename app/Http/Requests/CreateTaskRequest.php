@@ -24,10 +24,9 @@ class CreateTaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:2|max:255',
-            'email' => 'required|email',
+            'task_name' => 'required|string|min:2|max:255',
             'description' => 'required|string|min:5',
-            'img' => 'mimes:jpeg,jpg,png,gif|max:1000000'
+            'tags' => 'array'
         ];
     }
 }

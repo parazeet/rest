@@ -3,8 +3,9 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="card">
-            @include('partials.form-add')
+        <div class="card mb-3">
+            @include('partials.add_tag')
+            @include('partials.add_task')
             @include('partials.table')
             <div class="d-flex justify-content-center">
             {{ $tasks->links() }}

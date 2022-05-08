@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/task/{id}', [App\Http\Controllers\Api\TaskController::class, 'index']);
+    Route::get('/tag/{id}', [App\Http\Controllers\Api\TagController::class, 'index']);
 });

@@ -1,50 +1,4 @@
 (function () {
-    $('#btn_preview').click(function () {
-        clear();
-
-        $('#preview_name').text($('#name').val());
-        $('#preview_email').text($('#email').val());
-        $('#preview_description').text($('#description').val());
-
-        const file = $('#formFile')[0].files[0];
-        if (file){
-            let reader = new FileReader();
-            reader.onload = function(event){
-                $('#preview_img').attr('src', event.target.result);
-            }
-            reader.readAsDataURL(file);
-        }
-        $('#preview_img').attr('src', '/img/tasks_img/default_img.png');
-
-        $('#previewModal').modal('show');
-    });
-
-    function clear() {
-        $('#preview_name').val('');
-        $('#preview_email').val('');
-        $('#preview_description').text('');
-        $('#preview_img').attr('src', '');
-    }
-
-// Реализация сортировки на jQuery+php
-    $('#task_table > thead > tr > th').each(function(){
-        var me = $(this);
-        me.click(function (){
-            //sortColumn(me);
-        });
-    });
-
-    function sortColumn(value) {
-        const columnName = value.data('name');
-        const url = $('#task_table').data('url');
-
-        send(url, {columnName: columnName}, function (data) {
-            if (data.success) {
-                // рисуем таблицу
-            }
-        });
-    }
-
     function send(url,
                   data = {},
                   success = function () {},
@@ -52,6 +6,7 @@
         $.ajax({
             url: url,
             data: data,
+            method: 'post',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -61,6 +16,15 @@
                 // alert error
             });
     }
+
+    $('#createTokken').click(function () {
+        const url = $(this).data('url');
+        send(url, {}, function (data) {
+            if (data.success) {
+                alertify.alert('Your Bearer Token', data.access_token);
+            }
+        });
+    })
 })();
 
 document.addEventListener('DOMContentLoaded', function() {

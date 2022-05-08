@@ -4,12 +4,10 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="card mb-3">
-            @include('partials.add_tag')
-            @include('partials.add_task')
-            @include('partials.table')
-            <div class="d-flex justify-content-center">
-            {{ $tasks->links() }}
-            </div>
+            <h4 class="text-center">All tags</h4>
+            @foreach($tags as $tag)
+                {{ $tag->name }}@if(!$loop->last){{ ', ' }}@endif
+            @endforeach
         </div>
     </div>
 </div>

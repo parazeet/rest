@@ -1,8 +1,8 @@
 <form class="row gx-3 gy-2 align-items-center mt-3" method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
     @csrf
     <div class="col-sm-3">
-        <label for="sum" class="visually-hidden">Имя пользователя</label>
-        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" name="name" placeholder="Имя пользователя" required>
+        <label for="sum" class="visually-hidden">Тег</label>
+        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" name="name" placeholder="Название тега" required>
     </div>
     <div class="col-sm-3">
         <label for="sum" class="visually-hidden">е-mail</label>
@@ -21,4 +21,4 @@
         <button type="submit" class="btn btn-primary">Save</button>
     </div>
 </form>
-@include('partials.preview')
+
